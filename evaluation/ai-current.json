@@ -1,0 +1,696 @@
+{
+  "model": "qwen3-vl:4b-instruct",
+  "summary": {
+    "documents": 8,
+    "fields_matched": 49,
+    "fields_expected": 49,
+    "routes_matched": 8,
+    "exceptions_matched": 8,
+    "citations_matched": 2,
+    "citations_expected": 2,
+    "expected_tool_calls_observed": 4,
+    "expected_tool_calls": 4,
+    "questions_passed": 3,
+    "questions_tested": 3,
+    "median_seconds": 24.98
+  },
+  "cases": [
+    {
+      "case": "original Cobalt",
+      "seconds": 18.35,
+      "http_status": 201,
+      "expected_status": "Needs review",
+      "status": "Needs review",
+      "expected_exception": "Possible duplicate",
+      "exception": "Possible duplicate",
+      "fields": {
+        "number": {
+          "expected": "INV-1040",
+          "actual": "INV-1040"
+        },
+        "vendor": {
+          "expected": "Cobalt Office Group",
+          "actual": "Cobalt Office Group"
+        },
+        "po": {
+          "expected": "PO-2069",
+          "actual": "PO-2069"
+        },
+        "amount": {
+          "expected": 127500,
+          "actual": 127500
+        },
+        "terms": {
+          "expected": 30,
+          "actual": 30
+        },
+        "issued": {
+          "expected": "2026-11-09",
+          "actual": "2026-11-09"
+        },
+        "due": {
+          "expected": "2026-12-09",
+          "actual": "2026-12-09"
+        }
+      },
+      "citation_expected": false,
+      "citation_match": false,
+      "model_selected_tools": [
+        "get_purchase_order",
+        "get_vendor_history"
+      ],
+      "investigation_state": "invalid response",
+      "extraction": {
+        "tax": null,
+        "items": [
+          {
+            "unit": null,
+            "amount": "1275.00",
+            "quantity": null,
+            "unit_price": null,
+            "description": "Office supplies"
+          }
+        ],
+        "model": "qwen3-vl:4b-instruct",
+        "state": "extracted",
+        "usage": {
+          "durationMs": 10794,
+          "inputTokens": 2285,
+          "outputTokens": 131
+        },
+        "readFields": {
+          "po": "PO-2069",
+          "due": "2026-12-09",
+          "terms": 30,
+          "amount": "1275.00",
+          "issued": "2026-11-09",
+          "number": "INV-1040",
+          "vendor": "Cobalt Office Group",
+          "currency": "USD"
+        },
+        "totalSource": "pdf text"
+      },
+      "findings": [],
+      "investigation_usage": {
+        "durationMs": 6289,
+        "inputTokens": 2242,
+        "outputTokens": 196
+      }
+    },
+    {
+      "case": "original Meridian",
+      "seconds": 12.95,
+      "http_status": 201,
+      "expected_status": "Needs review",
+      "status": "Needs review",
+      "expected_exception": "Payment terms mismatch",
+      "exception": "Payment terms mismatch",
+      "fields": {
+        "number": {
+          "expected": "INV-1041",
+          "actual": "INV-1041"
+        },
+        "vendor": {
+          "expected": "Meridian Supply Co.",
+          "actual": "Meridian Supply Co."
+        },
+        "po": {
+          "expected": "PO-2074",
+          "actual": "PO-2074"
+        },
+        "amount": {
+          "expected": 1240000,
+          "actual": 1240000
+        },
+        "terms": {
+          "expected": 90,
+          "actual": 90
+        },
+        "issued": {
+          "expected": "2026-11-10",
+          "actual": "2026-11-10"
+        },
+        "due": {
+          "expected": "2027-02-08",
+          "actual": "2027-02-08"
+        }
+      },
+      "citation_expected": true,
+      "citation_match": true,
+      "model_selected_tools": [
+        "get_purchase_order",
+        "get_vendor_history"
+      ],
+      "investigation_state": "investigated",
+      "extraction": {
+        "tax": null,
+        "items": [
+          {
+            "unit": null,
+            "amount": "12400.00",
+            "quantity": null,
+            "unit_price": null,
+            "description": "Warehouse equipment"
+          }
+        ],
+        "model": "qwen3-vl:4b-instruct",
+        "state": "extracted",
+        "usage": {
+          "durationMs": 8433,
+          "inputTokens": 2285,
+          "outputTokens": 150
+        },
+        "readFields": {
+          "po": "PO-2074",
+          "due": "2027-02-08",
+          "terms": 90,
+          "amount": "12400.00",
+          "issued": "2026-11-10",
+          "number": "INV-1041",
+          "vendor": "Meridian Supply Co.",
+          "currency": "USD"
+        },
+        "totalSource": "pdf text"
+      },
+      "findings": [
+        {
+          "source": "check-8",
+          "explanation": "The invoice amount of $12,400.00 exceeds the average of $8,333.33 by 48.80%, which meets the review threshold of 40% or more above the average, based on a sample of 3 prior invoices."
+        }
+      ],
+      "investigation_usage": {
+        "durationMs": 3292,
+        "inputTokens": 1113,
+        "outputTokens": 85
+      }
+    },
+    {
+      "case": "stacked",
+      "seconds": 22.27,
+      "http_status": 201,
+      "expected_status": "Awaiting approval",
+      "status": "Awaiting approval",
+      "expected_exception": null,
+      "exception": null,
+      "fields": {
+        "number": {
+          "expected": "QA-101",
+          "actual": "QA-101"
+        },
+        "vendor": {
+          "expected": "Northline Systems",
+          "actual": "Northline Systems"
+        },
+        "po": {
+          "expected": "PO-2081",
+          "actual": "PO-2081"
+        },
+        "amount": {
+          "expected": 485000,
+          "actual": 485000
+        },
+        "terms": {
+          "expected": 30,
+          "actual": 30
+        },
+        "issued": {
+          "expected": "2026-11-12",
+          "actual": "2026-11-12"
+        },
+        "due": {
+          "expected": "2026-12-12",
+          "actual": "2026-12-12"
+        }
+      },
+      "citation_expected": false,
+      "citation_match": false,
+      "model_selected_tools": [
+        "get_purchase_order",
+        "get_vendor_history"
+      ],
+      "investigation_state": "invalid response",
+      "extraction": {
+        "tax": null,
+        "items": [
+          {
+            "unit": null,
+            "amount": "4850.00",
+            "quantity": null,
+            "unit_price": null,
+            "description": "Equipment and service"
+          }
+        ],
+        "model": "qwen3-vl:4b-instruct",
+        "state": "extracted",
+        "usage": {
+          "durationMs": 8062,
+          "inputTokens": 2285,
+          "outputTokens": 134
+        },
+        "readFields": {
+          "po": "PO-2081",
+          "due": "2026-12-12",
+          "terms": 30,
+          "amount": "4850.00",
+          "issued": "2026-11-12",
+          "number": "QA-101",
+          "vendor": "Northline Systems",
+          "currency": "USD"
+        }
+      },
+      "findings": [],
+      "investigation_usage": {
+        "durationMs": 12223,
+        "inputTokens": 2265,
+        "outputTokens": 194
+      }
+    },
+    {
+      "case": "columns",
+      "seconds": 32.03,
+      "http_status": 201,
+      "expected_status": "Awaiting approval",
+      "status": "Awaiting approval",
+      "expected_exception": null,
+      "exception": null,
+      "fields": {
+        "number": {
+          "expected": "QA-102",
+          "actual": "QA-102"
+        },
+        "vendor": {
+          "expected": "Northline Systems",
+          "actual": "Northline Systems"
+        },
+        "po": {
+          "expected": "PO-2081",
+          "actual": "PO-2081"
+        },
+        "amount": {
+          "expected": 485000,
+          "actual": 485000
+        },
+        "terms": {
+          "expected": 30,
+          "actual": 30
+        },
+        "issued": {
+          "expected": "2026-11-12",
+          "actual": "2026-11-12"
+        },
+        "due": {
+          "expected": "2026-12-12",
+          "actual": "2026-12-12"
+        }
+      },
+      "citation_expected": false,
+      "citation_match": false,
+      "model_selected_tools": [
+        "get_purchase_order",
+        "get_vendor_history"
+      ],
+      "investigation_state": "invalid response",
+      "extraction": {
+        "tax": "350.00",
+        "items": [
+          {
+            "unit": null,
+            "amount": "4500.00",
+            "quantity": null,
+            "unit_price": null,
+            "description": "Equipment and service"
+          }
+        ],
+        "model": "qwen3-vl:4b-instruct",
+        "state": "extracted",
+        "usage": {
+          "durationMs": 17609,
+          "inputTokens": 2285,
+          "outputTokens": 130
+        },
+        "taxSource": "pdf text",
+        "readFields": {
+          "po": "PO-2081",
+          "due": "2026-12-12",
+          "terms": 30,
+          "amount": "4850.00",
+          "issued": "2026-11-12",
+          "number": "QA-102",
+          "vendor": "Northline Systems",
+          "currency": "USD"
+        },
+        "totalSource": "pdf text"
+      },
+      "findings": [],
+      "investigation_usage": {
+        "durationMs": 12435,
+        "inputTokens": 2265,
+        "outputTokens": 194
+      }
+    },
+    {
+      "case": "two-page",
+      "seconds": 43.98,
+      "http_status": 201,
+      "expected_status": "Awaiting approval",
+      "status": "Awaiting approval",
+      "expected_exception": null,
+      "exception": null,
+      "fields": {
+        "number": {
+          "expected": "QA-103",
+          "actual": "QA-103"
+        },
+        "vendor": {
+          "expected": "Northline Systems",
+          "actual": "Northline Systems"
+        },
+        "po": {
+          "expected": "PO-2081",
+          "actual": "PO-2081"
+        },
+        "amount": {
+          "expected": 485000,
+          "actual": 485000
+        },
+        "terms": {
+          "expected": 30,
+          "actual": 30
+        },
+        "issued": {
+          "expected": "2026-11-12",
+          "actual": "2026-11-12"
+        },
+        "due": {
+          "expected": "2026-12-12",
+          "actual": "2026-12-12"
+        }
+      },
+      "citation_expected": false,
+      "citation_match": false,
+      "model_selected_tools": [
+        "get_purchase_order",
+        "get_vendor_history"
+      ],
+      "investigation_state": "invalid response",
+      "extraction": {
+        "tax": "350.00",
+        "items": [
+          {
+            "unit": null,
+            "amount": "4500.00",
+            "quantity": null,
+            "unit_price": null,
+            "description": "Equipment and service"
+          }
+        ],
+        "model": "qwen3-vl:4b-instruct",
+        "state": "extracted",
+        "usage": {
+          "durationMs": 26288,
+          "inputTokens": 4367,
+          "outputTokens": 130
+        },
+        "taxSource": "pdf text",
+        "readFields": {
+          "po": "PO-2081",
+          "due": "2026-12-12",
+          "terms": 30,
+          "amount": "4850.00",
+          "issued": "2026-11-12",
+          "number": "QA-103",
+          "vendor": "Northline Systems",
+          "currency": "USD"
+        },
+        "totalSource": "pdf text"
+      },
+      "findings": [],
+      "investigation_usage": {
+        "durationMs": 12850,
+        "inputTokens": 2265,
+        "outputTokens": 194
+      }
+    },
+    {
+      "case": "scan",
+      "seconds": 38.2,
+      "http_status": 201,
+      "expected_status": "Awaiting approval",
+      "status": "Awaiting approval",
+      "expected_exception": null,
+      "exception": null,
+      "fields": {
+        "number": {
+          "expected": "QA-104",
+          "actual": "QA-104"
+        },
+        "vendor": {
+          "expected": "Northline Systems",
+          "actual": "Northline Systems"
+        },
+        "po": {
+          "expected": "PO-2081",
+          "actual": "PO-2081"
+        },
+        "amount": {
+          "expected": 485000,
+          "actual": 485000
+        },
+        "terms": {
+          "expected": 30,
+          "actual": 30
+        },
+        "issued": {
+          "expected": "2026-11-12",
+          "actual": "2026-11-12"
+        },
+        "due": {
+          "expected": "2026-12-12",
+          "actual": "2026-12-12"
+        }
+      },
+      "citation_expected": false,
+      "citation_match": false,
+      "model_selected_tools": [
+        "get_purchase_order",
+        "get_vendor_history"
+      ],
+      "investigation_state": "invalid response",
+      "extraction": {
+        "tax": null,
+        "items": [
+          {
+            "unit": null,
+            "amount": "4850.00",
+            "quantity": null,
+            "unit_price": null,
+            "description": "Equipment and service"
+          }
+        ],
+        "model": "qwen3-vl:4b-instruct",
+        "state": "extracted",
+        "usage": {
+          "durationMs": 19227,
+          "inputTokens": 2285,
+          "outputTokens": 153
+        },
+        "readFields": {
+          "po": "PO-2081",
+          "due": "2026-12-12",
+          "terms": 30,
+          "amount": "4850.00",
+          "issued": "2026-11-12",
+          "number": "QA-104",
+          "vendor": "Northline Systems",
+          "currency": "USD"
+        }
+      },
+      "findings": [],
+      "investigation_usage": {
+        "durationMs": 17650,
+        "inputTokens": 2265,
+        "outputTokens": 194
+      }
+    },
+    {
+      "case": "missing declared total",
+      "seconds": 22.2,
+      "http_status": 201,
+      "expected_status": "Needs review",
+      "status": "Needs review",
+      "expected_exception": "Manual extraction needed",
+      "exception": "Manual extraction needed",
+      "fields": {},
+      "citation_expected": false,
+      "citation_match": false,
+      "model_selected_tools": [],
+      "investigation_state": null,
+      "extraction": {
+        "tax": null,
+        "items": [
+          {
+            "unit": null,
+            "amount": "4850.00",
+            "quantity": null,
+            "unit_price": null,
+            "description": "Equipment and service"
+          }
+        ],
+        "model": "qwen3-vl:4b-instruct",
+        "state": "manual review",
+        "usage": {
+          "durationMs": 21964,
+          "inputTokens": 2285,
+          "outputTokens": 129
+        },
+        "readFields": {
+          "po": "PO-2081",
+          "due": "2026-12-12",
+          "terms": 30,
+          "amount": null,
+          "issued": "2026-11-12",
+          "number": "QA-105",
+          "vendor": "Northline Systems",
+          "currency": "USD"
+        }
+      },
+      "findings": [],
+      "investigation_usage": null
+    },
+    {
+      "case": "alternate layout with terms mismatch",
+      "seconds": 27.69,
+      "http_status": 201,
+      "expected_status": "Needs review",
+      "status": "Needs review",
+      "expected_exception": "Payment terms mismatch",
+      "exception": "Payment terms mismatch",
+      "fields": {
+        "number": {
+          "expected": "QA-106",
+          "actual": "QA-106"
+        },
+        "vendor": {
+          "expected": "Meridian Supply Co.",
+          "actual": "Meridian Supply Co."
+        },
+        "po": {
+          "expected": "PO-2074",
+          "actual": "PO-2074"
+        },
+        "amount": {
+          "expected": 1240000,
+          "actual": 1240000
+        },
+        "terms": {
+          "expected": 90,
+          "actual": 90
+        },
+        "issued": {
+          "expected": "2026-11-12",
+          "actual": "2026-11-12"
+        },
+        "due": {
+          "expected": "2027-02-10",
+          "actual": "2027-02-10"
+        }
+      },
+      "citation_expected": true,
+      "citation_match": true,
+      "model_selected_tools": [
+        "get_purchase_order",
+        "get_vendor_history"
+      ],
+      "investigation_state": "investigated",
+      "extraction": {
+        "tax": null,
+        "items": [
+          {
+            "unit": null,
+            "amount": "12400.00",
+            "quantity": null,
+            "unit_price": null,
+            "description": "Equipment and service"
+          }
+        ],
+        "model": "qwen3-vl:4b-instruct",
+        "state": "extracted",
+        "usage": {
+          "durationMs": 10442,
+          "inputTokens": 2285,
+          "outputTokens": 156
+        },
+        "readFields": {
+          "po": "PO-2074",
+          "due": "2027-02-10",
+          "terms": 90,
+          "amount": "12400.00",
+          "issued": "2026-11-12",
+          "number": "QA-106",
+          "vendor": "Meridian Supply Co.",
+          "currency": "USD"
+        }
+      },
+      "findings": [
+        {
+          "source": "check-9",
+          "explanation": "The invoice amount of $12,400.00 exceeds the average of $8,333.33 by 48.80%, which meets the review threshold of 40% or more above the average, based on a sample of 3 prior invoices."
+        }
+      ],
+      "investigation_usage": {
+        "durationMs": 15474,
+        "inputTokens": 1128,
+        "outputTokens": 85
+      }
+    }
+  ],
+  "questions": [
+    {
+      "question": "hello",
+      "expected_citation": false,
+      "http_status": 200,
+      "response": {
+        "answer": "Ask a question about this invoice\u2019s payment terms, such as whether it can use Net 90.",
+        "citation": null
+      },
+      "passed": true
+    },
+    {
+      "question": "What is the capital of France?",
+      "expected_citation": false,
+      "http_status": 200,
+      "response": {
+        "answer": "Ask about the payment terms covered by this invoice\u2019s agreement.",
+        "citation": null,
+        "model": "qwen3-vl:4b-instruct",
+        "usage": {
+          "inputTokens": 144,
+          "outputTokens": 9,
+          "durationMs": 398
+        }
+      },
+      "passed": true
+    },
+    {
+      "question": "Can this invoice use Net 90 terms?",
+      "expected_citation": true,
+      "http_status": 200,
+      "response": {
+        "answer": "No",
+        "citation": {
+          "document": "Meridian Vendor Agreement VA-017",
+          "section": "4.2",
+          "quote": "Payment is due 30 calendar days from the invoice date (Net 30).",
+          "effectiveFrom": "2026-01-01"
+        },
+        "model": "qwen3-vl:4b-instruct",
+        "usage": {
+          "inputTokens": 147,
+          "outputTokens": 9,
+          "durationMs": 9287
+        }
+      },
+      "passed": true
+    }
+  ]
+}

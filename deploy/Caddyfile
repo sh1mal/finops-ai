@@ -1,0 +1,14 @@
+{$FINOPS_DEMO_HOST} {
+	basic_auth {
+		{$FINOPS_DEMO_USER} {$FINOPS_DEMO_PASSWORD_HASH}
+	}
+
+	header {
+		Cache-Control "private, no-store"
+		X-Robots-Tag "noindex, nofollow"
+	}
+
+	reverse_proxy web:3000 {
+		header_up -Authorization
+	}
+}

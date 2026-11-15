@@ -1,0 +1,57 @@
+x-backend: &backend
+  build:
+    context: .
+    dockerfile: backend/Dockerfile
+  environment: &database-client
+    FINOPS_DATABASE_URL: "host=db dbname=finops user=finops"
+    PGPASSWORD: "${FINOPS_DB_PASSWORD:?Set FINOPS_DB_PASSWORD}"
+services:
+  db:
+    image: pgvector/pgvector:0.8.7-pg17
+    environment:
+      POSTGRES_USER: finops
+      POSTGRES_DB: finops
+      POSTGRES_PASSWORD: "${FINOPS_DB_PASSWORD:?Set FINOPS_DB_PASSWORD}"
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "finops", "-d", "finops", "-h", "127.0.0.1"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+  seed:
+    <<: *backend
+    command: ["python", "-m", "backend.seed"]
+    depends_on:
+      db:
+        condition: service_healthy
+  api:
+    <<: *backend
+    environment:
+      <<: *database-client
+      FINOPS_REVIEWER_PASSWORD: "${FINOPS_REVIEWER_PASSWORD:?Set FINOPS_REVIEWER_PASSWORD}"
+      FINOPS_OLLAMA_MODEL: "${FINOPS_OLLAMA_MODEL:-}"
+      FINOPS_OLLAMA_URL: "${FINOPS_OLLAMA_URL:-http://host.docker.internal:11434}"
+      FINOPS_OLLAMA_TIMEOUT: "${FINOPS_OLLAMA_TIMEOUT:-120}"
+      FINOPS_GEMINI_MODEL: "${FINOPS_GEMINI_MODEL:-}"
+      FINOPS_GEMINI_VERIFICATION_MODEL: "${FINOPS_GEMINI_VERIFICATION_MODEL:-}"
+      FINOPS_GEMINI_API_KEY: "${FINOPS_GEMINI_API_KEY:-}"
+      FINOPS_REVIEWER_NAME: "${FINOPS_REVIEWER_NAME:-Finance reviewer}"
+      FINOPS_SECURE_COOKIE: "${FINOPS_SECURE_COOKIE:-0}"
+    depends_on:
+      seed:
+        condition: service_completed_successfully
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=2)"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+  web:
+    build: .
+    depends_on:
+      api:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:${FINOPS_DEMO_PORT:-3001}:3000"
+volumes:
+  postgres:

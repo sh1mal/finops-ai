@@ -1,0 +1,10 @@
+fastapi==0.162.5
+uvicorn==0.54.0
+psycopg[binary]==3.3.9
+python-multipart==0.0.33
+pypdf==6.21.4
+langgraph==1.2.21
+langgraph-checkpoint-postgres==3.2.0
+mcp==1.30.0
+pypdfium2==5.15.2
+pillow==13.0.0

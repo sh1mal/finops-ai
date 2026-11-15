@@ -1,0 +1,275 @@
+{
+  "model": "qwen3-vl:4b-instruct",
+  "summary": {
+    "documents": 7,
+    "routes_matched": 7,
+    "exceptions_matched": 7,
+    "checks": {
+      "line": {
+        "true_holds": 2,
+        "true_passes": 2,
+        "false_holds": 0,
+        "missed_holds": 0,
+        "checks_not_run": 0
+      },
+      "risk": {
+        "true_holds": 2,
+        "true_passes": 1,
+        "false_holds": 0,
+        "missed_holds": 0,
+        "checks_not_run": 0
+      }
+    }
+  },
+  "cases": [
+    {
+      "invoice": "QA-L201",
+      "category": "line",
+      "label": "reordered descriptions with explicit variants",
+      "expected_hold": false,
+      "observed_hold": false,
+      "expected_exception": null,
+      "exception": null,
+      "expected_status": "Awaiting approval",
+      "status": "Awaiting approval",
+      "check": {
+        "title": "PO lines reconciled",
+        "detail": "All PO lines matched on quantity, unit, and unit price.",
+        "passed": true,
+        "source": "PO-2092",
+        "linePairs": [
+          {
+            "po": {
+              "unit": "each",
+              "variant": "space black",
+              "quantity": 1,
+              "description": "Apple MacBook Pro 14-inch M5, space black",
+              "line_number": 2,
+              "variant_family": "MacBook Pro M5 14",
+              "unit_price_cents": 200000
+            },
+            "issues": [],
+            "invoice": {
+              "unit": "each",
+              "amount": "2000.00",
+              "quantity": 1,
+              "unit_price": "2000.00",
+              "description": "Space black - Apple MBP M5 14 inch"
+            },
+            "invoiceLine": 1
+          },
+          {
+            "po": {
+              "unit": "each",
+              "variant": "silver",
+              "quantity": 1,
+              "description": "Apple MacBook Pro 14-inch M5, silver",
+              "line_number": 1,
+              "variant_family": "MacBook Pro M5 14",
+              "unit_price_cents": 200000
+            },
+            "issues": [],
+            "invoice": {
+              "unit": "each",
+              "amount": "2000.00",
+              "quantity": 1,
+              "unit_price": "2000.00",
+              "description": "Silver - Apple MBP M5 14 inch"
+            },
+            "invoiceLine": 2
+          }
+        ]
+      },
+      "seconds": 53.96
+    },
+    {
+      "invoice": "QA-L202",
+      "category": "line",
+      "label": "abbreviated equivalent item",
+      "expected_hold": false,
+      "observed_hold": false,
+      "expected_exception": null,
+      "exception": null,
+      "expected_status": "Awaiting approval",
+      "status": "Awaiting approval",
+      "check": {
+        "title": "PO lines reconciled",
+        "detail": "All PO lines matched on quantity, unit, and unit price.",
+        "passed": true,
+        "source": "PO-2090",
+        "linePairs": [
+          {
+            "po": {
+              "unit": "each",
+              "variant": null,
+              "quantity": 2,
+              "description": "Apple MacBook Pro 14-inch M5",
+              "line_number": 1,
+              "variant_family": null,
+              "unit_price_cents": 200000
+            },
+            "issues": [],
+            "invoice": {
+              "unit": "each",
+              "amount": "4000.00",
+              "quantity": 2,
+              "unit_price": "2000.00",
+              "description": "Apple MBP M5 14-inch notebook"
+            },
+            "invoiceLine": 1
+          }
+        ]
+      },
+      "seconds": 48.75
+    },
+    {
+      "invoice": "QA-L203",
+      "category": "line",
+      "label": "same total with different quantity and price",
+      "expected_hold": true,
+      "observed_hold": true,
+      "expected_exception": "PO lines need review",
+      "exception": "PO lines need review",
+      "expected_status": "Needs review",
+      "status": "Needs review",
+      "check": {
+        "title": "PO lines need review",
+        "detail": "Line 1: Quantity differs or is missing. Line 1: Unit price differs or is missing.",
+        "passed": false,
+        "source": "PO-2090",
+        "linePairs": [
+          {
+            "po": {
+              "unit": "each",
+              "variant": null,
+              "quantity": 2,
+              "description": "Apple MacBook Pro 14-inch M5",
+              "line_number": 1,
+              "variant_family": null,
+              "unit_price_cents": 200000
+            },
+            "issues": [
+              "Quantity differs or is missing.",
+              "Unit price differs or is missing."
+            ],
+            "invoice": {
+              "unit": "each",
+              "amount": "4000.00",
+              "quantity": 4,
+              "unit_price": "1000.00",
+              "description": "Apple MacBook Pro 14-inch M5"
+            },
+            "invoiceLine": 1
+          }
+        ]
+      },
+      "seconds": 39.15
+    },
+    {
+      "invoice": "QA-L204",
+      "category": "line",
+      "label": "missing variant with two plausible PO lines",
+      "expected_hold": true,
+      "observed_hold": true,
+      "expected_exception": "PO lines need review",
+      "exception": "PO lines need review",
+      "expected_status": "Needs review",
+      "status": "Needs review",
+      "check": {
+        "title": "PO lines need review",
+        "detail": "Line 1: Ambiguous description. Confirm the product variant. Line 2: Ambiguous description. Confirm the product variant. Unpaired PO lines: 1, 2.",
+        "passed": false,
+        "source": "PO-2092",
+        "linePairs": [
+          {
+            "po": null,
+            "issues": [
+              "Ambiguous description. Confirm the product variant."
+            ],
+            "invoice": {
+              "unit": "each",
+              "amount": "2000.00",
+              "quantity": 1,
+              "unit_price": "2000.00",
+              "description": "Apple MacBook Pro 14-inch M5"
+            },
+            "invoiceLine": 1
+          },
+          {
+            "po": null,
+            "issues": [
+              "Ambiguous description. Confirm the product variant."
+            ],
+            "invoice": {
+              "unit": "each",
+              "amount": "2000.00",
+              "quantity": 1,
+              "unit_price": "2000.00",
+              "description": "Apple MacBook Pro 14-inch M5"
+            },
+            "invoiceLine": 2
+          }
+        ]
+      },
+      "seconds": 26.98
+    },
+    {
+      "invoice": "QA-R201",
+      "category": "risk",
+      "label": "last cent below threshold",
+      "expected_hold": false,
+      "observed_hold": false,
+      "expected_exception": null,
+      "exception": null,
+      "expected_status": "Awaiting approval",
+      "status": "Awaiting approval",
+      "check": {
+        "title": "Invoice amount within history threshold",
+        "detail": "$11,666.66 is 40.00% above the average of $8,333.33 across 3 prior invoices. Review threshold: 40% or more above the average.",
+        "lookup": "get_vendor_history",
+        "passed": true,
+        "source": "Vendor invoice history before 2026-11-12 UTC"
+      },
+      "seconds": 19.79
+    },
+    {
+      "invoice": "QA-R202",
+      "category": "risk",
+      "label": "first cent at or above threshold",
+      "expected_hold": true,
+      "observed_hold": true,
+      "expected_exception": "Unusual invoice amount",
+      "exception": "Unusual invoice amount",
+      "expected_status": "Needs review",
+      "status": "Needs review",
+      "check": {
+        "title": "Unusual invoice amount",
+        "detail": "$11,666.67 is 40.00% above the average of $8,333.33 across 3 prior invoices. Review threshold: 40% or more above the average.",
+        "lookup": "get_vendor_history",
+        "passed": false,
+        "source": "Vendor invoice history before 2026-11-12 UTC"
+      },
+      "seconds": 12.53
+    },
+    {
+      "invoice": "QA-R203",
+      "category": "risk",
+      "label": "one cent above first flagged amount",
+      "expected_hold": true,
+      "observed_hold": true,
+      "expected_exception": "Unusual invoice amount",
+      "exception": "Unusual invoice amount",
+      "expected_status": "Needs review",
+      "status": "Needs review",
+      "check": {
+        "title": "Unusual invoice amount",
+        "detail": "$11,666.68 is 40.00% above the average of $8,333.33 across 3 prior invoices. Review threshold: 40% or more above the average.",
+        "lookup": "get_vendor_history",
+        "passed": false,
+        "source": "Vendor invoice history before 2026-11-12 UTC"
+      },
+      "seconds": 11.69
+    }
+  ],
+  "questions": []
+}

@@ -1,0 +1,604 @@
+{
+  "model": "qwen3-vl:4b-instruct",
+  "summary": {
+    "documents": 8,
+    "fields_matched": 49,
+    "fields_expected": 49,
+    "routes_matched": 8,
+    "exceptions_matched": 8,
+    "citations_matched": 2,
+    "citations_expected": 2,
+    "expected_tool_calls_observed": 3,
+    "expected_tool_calls": 4,
+    "questions_passed": 3,
+    "questions_tested": 3,
+    "median_seconds": 15.24
+  },
+  "cases": [
+    {
+      "case": "original Cobalt",
+      "seconds": 15.02,
+      "http_status": 201,
+      "expected_status": "Needs review",
+      "status": "Needs review",
+      "expected_exception": "Possible duplicate",
+      "exception": "Possible duplicate",
+      "fields": {
+        "number": {
+          "expected": "INV-1040",
+          "actual": "INV-1040"
+        },
+        "vendor": {
+          "expected": "Cobalt Office Group",
+          "actual": "Cobalt Office Group"
+        },
+        "po": {
+          "expected": "PO-2069",
+          "actual": "PO-2069"
+        },
+        "amount": {
+          "expected": 127500,
+          "actual": 127500
+        },
+        "terms": {
+          "expected": 30,
+          "actual": 30
+        },
+        "issued": {
+          "expected": "2026-11-09",
+          "actual": "2026-11-09"
+        },
+        "due": {
+          "expected": "2026-12-09",
+          "actual": "2026-12-09"
+        }
+      },
+      "citation_expected": false,
+      "citation_match": false,
+      "model_selected_tools": [
+        "get_purchase_order",
+        "get_vendor_history"
+      ],
+      "investigation_state": "invalid response",
+      "extraction": {
+        "tax": null,
+        "items": [
+          {
+            "amount": "1275.00",
+            "description": "Office supplies"
+          }
+        ],
+        "model": "qwen3-vl:4b-instruct",
+        "state": "extracted",
+        "usage": {
+          "durationMs": 8036,
+          "inputTokens": 2243,
+          "outputTokens": 131
+        },
+        "totalSource": "pdf text"
+      },
+      "findings": [],
+      "investigation_usage": {
+        "durationMs": 5842,
+        "inputTokens": 1938,
+        "outputTokens": 189
+      }
+    },
+    {
+      "case": "original Meridian",
+      "seconds": 14.41,
+      "http_status": 201,
+      "expected_status": "Needs review",
+      "status": "Needs review",
+      "expected_exception": "Payment terms mismatch",
+      "exception": "Payment terms mismatch",
+      "fields": {
+        "number": {
+          "expected": "INV-1041",
+          "actual": "INV-1041"
+        },
+        "vendor": {
+          "expected": "Meridian Supply Co.",
+          "actual": "Meridian Supply Co."
+        },
+        "po": {
+          "expected": "PO-2074",
+          "actual": "PO-2074"
+        },
+        "amount": {
+          "expected": 1240000,
+          "actual": 1240000
+        },
+        "terms": {
+          "expected": 90,
+          "actual": 90
+        },
+        "issued": {
+          "expected": "2026-11-10",
+          "actual": "2026-11-10"
+        },
+        "due": {
+          "expected": "2027-02-08",
+          "actual": "2027-02-08"
+        }
+      },
+      "citation_expected": true,
+      "citation_match": true,
+      "model_selected_tools": [
+        "get_purchase_order",
+        "get_vendor_history"
+      ],
+      "investigation_state": "investigated",
+      "extraction": {
+        "tax": null,
+        "items": [
+          {
+            "amount": "12400.00",
+            "description": "Warehouse equipment"
+          }
+        ],
+        "model": "qwen3-vl:4b-instruct",
+        "state": "extracted",
+        "usage": {
+          "durationMs": 8252,
+          "inputTokens": 2243,
+          "outputTokens": 137
+        }
+      },
+      "findings": [
+        {
+          "source": "check-5",
+          "explanation": "The invoice requests Net 90 payment terms, which contradicts the vendor agreement specifying Net 30. This is a policy violation as per the agreement effective from 2026-01-01. The vendor agreement is cited as Meridian Vendor Agreement VA-017 \u00a7 4.2."
+        },
+        {
+          "source": "check-7",
+          "explanation": "The invoice number INV-1041 has been previously issued to the same vendor with the same amount, indicating a possible duplicate. This is flagged as a potential hold reason due to duplicate invoice detection."
+        }
+      ],
+      "investigation_usage": {
+        "durationMs": 5151,
+        "inputTokens": 2355,
+        "outputTokens": 171
+      }
+    },
+    {
+      "case": "stacked",
+      "seconds": 15.51,
+      "http_status": 201,
+      "expected_status": "Awaiting approval",
+      "status": "Awaiting approval",
+      "expected_exception": null,
+      "exception": null,
+      "fields": {
+        "number": {
+          "expected": "QA-101",
+          "actual": "QA-101"
+        },
+        "vendor": {
+          "expected": "Northline Systems",
+          "actual": "Northline Systems"
+        },
+        "po": {
+          "expected": "PO-2081",
+          "actual": "PO-2081"
+        },
+        "amount": {
+          "expected": 485000,
+          "actual": 485000
+        },
+        "terms": {
+          "expected": 30,
+          "actual": 30
+        },
+        "issued": {
+          "expected": "2026-11-12",
+          "actual": "2026-11-12"
+        },
+        "due": {
+          "expected": "2026-12-12",
+          "actual": "2026-12-12"
+        }
+      },
+      "citation_expected": false,
+      "citation_match": false,
+      "model_selected_tools": [
+        "get_purchase_order",
+        "get_vendor_history"
+      ],
+      "investigation_state": "invalid response",
+      "extraction": {
+        "tax": null,
+        "items": [
+          {
+            "amount": "4850.00",
+            "description": "Equipment and service"
+          }
+        ],
+        "model": "qwen3-vl:4b-instruct",
+        "state": "extracted",
+        "usage": {
+          "durationMs": 8357,
+          "inputTokens": 2243,
+          "outputTokens": 134
+        }
+      },
+      "findings": [],
+      "investigation_usage": {
+        "durationMs": 6077,
+        "inputTokens": 1807,
+        "outputTokens": 191
+      }
+    },
+    {
+      "case": "columns",
+      "seconds": 15.42,
+      "http_status": 201,
+      "expected_status": "Awaiting approval",
+      "status": "Awaiting approval",
+      "expected_exception": null,
+      "exception": null,
+      "fields": {
+        "number": {
+          "expected": "QA-102",
+          "actual": "QA-102"
+        },
+        "vendor": {
+          "expected": "Northline Systems",
+          "actual": "Northline Systems"
+        },
+        "po": {
+          "expected": "PO-2081",
+          "actual": "PO-2081"
+        },
+        "amount": {
+          "expected": 485000,
+          "actual": 485000
+        },
+        "terms": {
+          "expected": 30,
+          "actual": 30
+        },
+        "issued": {
+          "expected": "2026-11-12",
+          "actual": "2026-11-12"
+        },
+        "due": {
+          "expected": "2026-12-12",
+          "actual": "2026-12-12"
+        }
+      },
+      "citation_expected": false,
+      "citation_match": false,
+      "model_selected_tools": [
+        "get_purchase_order",
+        "get_vendor_history"
+      ],
+      "investigation_state": "invalid response",
+      "extraction": {
+        "tax": "350.00",
+        "items": [
+          {
+            "amount": "4500.00",
+            "description": "Equipment and service"
+          }
+        ],
+        "model": "qwen3-vl:4b-instruct",
+        "state": "extracted",
+        "usage": {
+          "durationMs": 8548,
+          "inputTokens": 2243,
+          "outputTokens": 140
+        }
+      },
+      "findings": [],
+      "investigation_usage": {
+        "durationMs": 5804,
+        "inputTokens": 1807,
+        "outputTokens": 194
+      }
+    },
+    {
+      "case": "two-page",
+      "seconds": 21.25,
+      "http_status": 201,
+      "expected_status": "Awaiting approval",
+      "status": "Awaiting approval",
+      "expected_exception": null,
+      "exception": null,
+      "fields": {
+        "number": {
+          "expected": "QA-103",
+          "actual": "QA-103"
+        },
+        "vendor": {
+          "expected": "Northline Systems",
+          "actual": "Northline Systems"
+        },
+        "po": {
+          "expected": "PO-2081",
+          "actual": "PO-2081"
+        },
+        "amount": {
+          "expected": 485000,
+          "actual": 485000
+        },
+        "terms": {
+          "expected": 30,
+          "actual": 30
+        },
+        "issued": {
+          "expected": "2026-11-12",
+          "actual": "2026-11-12"
+        },
+        "due": {
+          "expected": "2026-12-12",
+          "actual": "2026-12-12"
+        }
+      },
+      "citation_expected": false,
+      "citation_match": false,
+      "model_selected_tools": [
+        "get_purchase_order",
+        "get_vendor_history"
+      ],
+      "investigation_state": "invalid response",
+      "extraction": {
+        "tax": "350.00",
+        "items": [
+          {
+            "amount": "4500.00",
+            "description": "Equipment and service"
+          }
+        ],
+        "model": "qwen3-vl:4b-instruct",
+        "state": "extracted",
+        "usage": {
+          "durationMs": 14094,
+          "inputTokens": 4325,
+          "outputTokens": 129
+        },
+        "taxSource": "pdf text",
+        "totalSource": "pdf text"
+      },
+      "findings": [],
+      "investigation_usage": {
+        "durationMs": 6027,
+        "inputTokens": 1807,
+        "outputTokens": 194
+      }
+    },
+    {
+      "case": "scan",
+      "seconds": 15.82,
+      "http_status": 201,
+      "expected_status": "Awaiting approval",
+      "status": "Awaiting approval",
+      "expected_exception": null,
+      "exception": null,
+      "fields": {
+        "number": {
+          "expected": "QA-104",
+          "actual": "QA-104"
+        },
+        "vendor": {
+          "expected": "Northline Systems",
+          "actual": "Northline Systems"
+        },
+        "po": {
+          "expected": "PO-2081",
+          "actual": "PO-2081"
+        },
+        "amount": {
+          "expected": 485000,
+          "actual": 485000
+        },
+        "terms": {
+          "expected": 30,
+          "actual": 30
+        },
+        "issued": {
+          "expected": "2026-11-12",
+          "actual": "2026-11-12"
+        },
+        "due": {
+          "expected": "2026-12-12",
+          "actual": "2026-12-12"
+        }
+      },
+      "citation_expected": false,
+      "citation_match": false,
+      "model_selected_tools": [
+        "get_purchase_order",
+        "get_vendor_history"
+      ],
+      "investigation_state": "invalid response",
+      "extraction": {
+        "tax": null,
+        "items": [
+          {
+            "amount": "4850.00",
+            "description": "Equipment and service"
+          }
+        ],
+        "model": "qwen3-vl:4b-instruct",
+        "state": "extracted",
+        "usage": {
+          "durationMs": 8302,
+          "inputTokens": 2243,
+          "outputTokens": 134
+        }
+      },
+      "findings": [],
+      "investigation_usage": {
+        "durationMs": 6483,
+        "inputTokens": 1807,
+        "outputTokens": 206
+      }
+    },
+    {
+      "case": "missing declared total",
+      "seconds": 8.28,
+      "http_status": 201,
+      "expected_status": "Needs review",
+      "status": "Needs review",
+      "expected_exception": "Manual extraction needed",
+      "exception": "Manual extraction needed",
+      "fields": {},
+      "citation_expected": false,
+      "citation_match": false,
+      "model_selected_tools": [],
+      "investigation_state": null,
+      "extraction": {
+        "tax": null,
+        "items": [
+          {
+            "amount": "4850.00",
+            "description": "Equipment and service"
+          }
+        ],
+        "model": "qwen3-vl:4b-instruct",
+        "state": "manual review",
+        "usage": {
+          "durationMs": 8105,
+          "inputTokens": 2243,
+          "outputTokens": 129
+        }
+      },
+      "findings": [],
+      "investigation_usage": null
+    },
+    {
+      "case": "alternate layout with terms mismatch",
+      "seconds": 15.06,
+      "http_status": 201,
+      "expected_status": "Needs review",
+      "status": "Needs review",
+      "expected_exception": "Payment terms mismatch",
+      "exception": "Payment terms mismatch",
+      "fields": {
+        "number": {
+          "expected": "QA-106",
+          "actual": "QA-106"
+        },
+        "vendor": {
+          "expected": "Meridian Supply Co.",
+          "actual": "Meridian Supply Co."
+        },
+        "po": {
+          "expected": "PO-2074",
+          "actual": "PO-2074"
+        },
+        "amount": {
+          "expected": 1240000,
+          "actual": 1240000
+        },
+        "terms": {
+          "expected": 90,
+          "actual": 90
+        },
+        "issued": {
+          "expected": "2026-11-12",
+          "actual": "2026-11-12"
+        },
+        "due": {
+          "expected": "2027-02-10",
+          "actual": "2027-02-10"
+        }
+      },
+      "citation_expected": true,
+      "citation_match": true,
+      "model_selected_tools": [
+        "get_purchase_order"
+      ],
+      "investigation_state": "investigated",
+      "extraction": {
+        "tax": null,
+        "items": [
+          {
+            "amount": "12400.00",
+            "description": "Equipment and service"
+          }
+        ],
+        "model": "qwen3-vl:4b-instruct",
+        "state": "extracted",
+        "usage": {
+          "durationMs": 8240,
+          "inputTokens": 2243,
+          "outputTokens": 137
+        }
+      },
+      "findings": [
+        {
+          "source": "check-1",
+          "explanation": "Vendor verified as matching vendor V-102."
+        },
+        {
+          "source": "check-2",
+          "explanation": "Purchase order PO-2074 is associated with Meridian Supply Co."
+        },
+        {
+          "source": "check-3",
+          "explanation": "Invoice total matches sum of line items: $12,400.00."
+        },
+        {
+          "source": "check-4",
+          "explanation": "Invoice total matches purchase order total: $12,400.00."
+        }
+      ],
+      "investigation_usage": {
+        "durationMs": 5518,
+        "inputTokens": 2206,
+        "outputTokens": 161
+      }
+    }
+  ],
+  "questions": [
+    {
+      "question": "hello",
+      "expected_citation": false,
+      "http_status": 200,
+      "response": {
+        "answer": "Ask a question about this invoice\u2019s payment terms, such as whether it can use Net 90.",
+        "citation": null
+      },
+      "passed": true
+    },
+    {
+      "question": "What is the capital of France?",
+      "expected_citation": false,
+      "http_status": 200,
+      "response": {
+        "answer": "Ask about the payment terms covered by this invoice\u2019s agreement.",
+        "citation": null,
+        "model": "qwen3-vl:4b-instruct",
+        "usage": {
+          "inputTokens": 144,
+          "outputTokens": 9,
+          "durationMs": 318
+        }
+      },
+      "passed": true
+    },
+    {
+      "question": "Can this invoice use Net 90 terms?",
+      "expected_citation": true,
+      "http_status": 200,
+      "response": {
+        "answer": "No",
+        "citation": {
+          "document": "Meridian Vendor Agreement VA-017",
+          "section": "4.2",
+          "quote": "Payment is due 30 calendar days from the invoice date (Net 30).",
+          "effectiveFrom": "2026-01-01"
+        },
+        "model": "qwen3-vl:4b-instruct",
+        "usage": {
+          "inputTokens": 147,
+          "outputTokens": 9,
+          "durationMs": 247
+        }
+      },
+      "passed": true
+    }
+  ]
+}

@@ -1,0 +1,196 @@
+{
+  "model": "qwen3-vl:4b-instruct",
+  "summary": {
+    "documents": 6,
+    "routes_matched": 6,
+    "exceptions_matched": 6,
+    "checks_matched": 6,
+    "median_seconds": 35.46
+  },
+  "cases": [
+    {
+      "invoice": "LINE-101",
+      "actual_number": "LINE-101",
+      "expected_status": "Awaiting approval",
+      "status": "Awaiting approval",
+      "expected_exception": null,
+      "exception": null,
+      "expected_check": "PO lines reconciled",
+      "expected_check_passed": true,
+      "check": {
+        "title": "PO lines reconciled",
+        "detail": "All PO lines matched on quantity, unit, and unit price.",
+        "passed": true,
+        "source": "PO-2090",
+        "linePairs": [
+          {
+            "po": {
+              "unit": "each",
+              "variant": null,
+              "quantity": 2,
+              "description": "Apple MacBook Pro 14-inch M5",
+              "line_number": 1,
+              "variant_family": null,
+              "unit_price_cents": 200000
+            },
+            "issues": [],
+            "invoice": {
+              "unit": "each",
+              "amount": "4000.00",
+              "quantity": 2,
+              "unit_price": "2000.00",
+              "description": "Apple MBP M5 14"
+            },
+            "invoiceLine": 1
+          }
+        ]
+      },
+      "seconds": 26.85
+    },
+    {
+      "invoice": "LINE-102",
+      "actual_number": "LINE-102",
+      "expected_status": "Needs review",
+      "status": "Needs review",
+      "expected_exception": "PO lines need review",
+      "exception": "PO lines need review",
+      "expected_check": "PO lines need review",
+      "expected_check_passed": false,
+      "check": {
+        "title": "PO lines need review",
+        "detail": "Line 1: Quantity differs or is missing. Line 1: Unit price differs or is missing.",
+        "passed": false,
+        "source": "PO-2091",
+        "linePairs": [
+          {
+            "po": {
+              "unit": "each",
+              "variant": null,
+              "quantity": 2,
+              "description": "Apple MacBook Pro 14-inch M5",
+              "line_number": 1,
+              "variant_family": null,
+              "unit_price_cents": 200000
+            },
+            "issues": [
+              "Quantity differs or is missing.",
+              "Unit price differs or is missing."
+            ],
+            "invoice": {
+              "unit": "each",
+              "amount": "4000.00",
+              "quantity": 1,
+              "unit_price": "4000.00",
+              "description": "Apple MBP M5 14"
+            },
+            "invoiceLine": 1
+          }
+        ]
+      },
+      "seconds": 31.79
+    },
+    {
+      "invoice": "LINE-103",
+      "actual_number": "LINE-103",
+      "expected_status": "Needs review",
+      "status": "Needs review",
+      "expected_exception": "PO lines need review",
+      "exception": "PO lines need review",
+      "expected_check": "PO lines need review",
+      "expected_check_passed": false,
+      "check": {
+        "title": "PO lines need review",
+        "detail": "Line 1: Ambiguous description. Confirm the product variant. Line 2: No valid PO line match. Unpaired PO lines: 1, 2.",
+        "passed": false,
+        "source": "PO-2092",
+        "linePairs": [
+          {
+            "po": null,
+            "issues": [
+              "Ambiguous description. Confirm the product variant."
+            ],
+            "invoice": {
+              "unit": "each",
+              "amount": "2000.00",
+              "quantity": 1,
+              "unit_price": "2000.00",
+              "description": "Apple MBP M5 14"
+            },
+            "invoiceLine": 1
+          },
+          {
+            "po": null,
+            "issues": [
+              "No valid PO line match."
+            ],
+            "invoice": {
+              "unit": "each",
+              "amount": "2000.00",
+              "quantity": 1,
+              "unit_price": "2000.00",
+              "description": "Apple MBP M5 14 - silver"
+            },
+            "invoiceLine": 2
+          }
+        ]
+      },
+      "seconds": 43.42
+    },
+    {
+      "invoice": "RISK-101",
+      "actual_number": "RISK-101",
+      "expected_status": "Needs review",
+      "status": "Needs review",
+      "expected_exception": "Unusual invoice amount",
+      "exception": "Unusual invoice amount",
+      "expected_check": "Unusual invoice amount",
+      "expected_check_passed": false,
+      "check": {
+        "title": "Unusual invoice amount",
+        "detail": "$12,000.00 is 44.00% above the average of $8,333.33 across 3 prior invoices. Review threshold: 40% or more above the average.",
+        "lookup": "get_vendor_history",
+        "passed": false,
+        "source": "Vendor invoice history before 2026-11-12 UTC"
+      },
+      "seconds": 39.13
+    },
+    {
+      "invoice": "RISK-102",
+      "actual_number": "RISK-102",
+      "expected_status": "Awaiting approval",
+      "status": "Awaiting approval",
+      "expected_exception": null,
+      "exception": null,
+      "expected_check": "Invoice amount within history threshold",
+      "expected_check_passed": true,
+      "check": {
+        "title": "Invoice amount within history threshold",
+        "detail": "$9,000.00 is 8.00% above the average of $8,333.33 across 3 prior invoices. Review threshold: 40% or more above the average.",
+        "lookup": "get_vendor_history",
+        "passed": true,
+        "source": "Vendor invoice history before 2026-11-12 UTC"
+      },
+      "seconds": 43.24
+    },
+    {
+      "invoice": "RISK-103",
+      "actual_number": "RISK-103",
+      "expected_status": "Awaiting approval",
+      "status": "Awaiting approval",
+      "expected_exception": null,
+      "exception": null,
+      "expected_check": "Insufficient vendor history",
+      "expected_check_passed": true,
+      "check": {
+        "title": "Insufficient vendor history",
+        "detail": "Found 1 prior invoices. The amount check requires at least 3.",
+        "lookup": "get_vendor_history",
+        "passed": true,
+        "source": "Vendor invoice history before 2026-11-12 UTC",
+        "skipped": true
+      },
+      "seconds": 18.47
+    }
+  ],
+  "questions": []
+}
